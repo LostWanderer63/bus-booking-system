@@ -2,13 +2,13 @@
 CREATE DATABASE IF NOT EXISTS bus_booking;
 USE bus_booking;
 
-CREATE TABLE Users (
+CREATE TABLE IF NOT EXISTS Users (
   id INT AUTO_INCREMENT PRIMARY KEY,
   name VARCHAR(255) NOT NULL,
   email VARCHAR(255) NOT NULL UNIQUE
 );
 
-CREATE TABLE Buses (
+CREATE TABLE IF NOT EXISTS Buses (
   id INT AUTO_INCREMENT PRIMARY KEY,
   busNumber VARCHAR(50) NOT NULL UNIQUE,
   totalSeats INT NOT NULL,
@@ -17,13 +17,13 @@ CREATE TABLE Buses (
   CHECK (availableSeats >= 0 AND availableSeats <= totalSeats)
 );
 
-CREATE TABLE Bookings (
+CREATE TABLE IF NOT EXISTS Bookings (
   id INT AUTO_INCREMENT PRIMARY KEY,
   seatNumber INT NOT NULL,
   CHECK (seatNumber > 0)
 );
 
-CREATE TABLE Payments (
+CREATE TABLE IF NOT EXISTS Payments (
   id INT AUTO_INCREMENT PRIMARY KEY,
   amountPaid DECIMAL(10, 2) NOT NULL,
   paymentStatus ENUM('pending', 'success', 'failed') NOT NULL DEFAULT 'pending',

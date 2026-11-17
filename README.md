@@ -41,9 +41,19 @@ Each resource supports `GET /`, `GET /:id`, `POST /`, `PUT /:id`, `DELETE /:id`.
 | Bookings | `/bookings` | seatNumber                                |
 | Payments | `/payments` | amountPaid, paymentStatus                 |
 
+All insert, update and delete operations are logged to the console with a `[DB]` prefix.
+Updating or deleting a non-existent id returns `404`; a non-numeric id returns `400`.
+The connection pool is reused across requests and closed on `SIGINT`/`SIGTERM`.
+
 Example:
 
 ```bash
 curl -X POST localhost:3000/users -H 'Content-Type: application/json' \
   -d '{"name":"Asha","email":"asha@example.com"}'
 ```
+
+### Additional task demo
+
+With the server running, `npm run demo` creates **Virat Kohli** (`virat.kohli@example.com`),
+updates it to **King Kohli** (`king.kohli@example.com`), deletes it, then confirms that
+GET/PUT/DELETE on the deleted id return `404`.

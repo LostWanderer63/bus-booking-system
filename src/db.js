@@ -8,7 +8,28 @@ const pool = mysql.createPool({
   password: process.env.DB_PASSWORD || '',
   database: process.env.DB_NAME || 'bus_booking',
   waitForConnections: true,
-  connectionLimit: 10,
+  connectionLimit: Number(process.env.DB_POOL_SIZE) || 10,
+  queueLimit: 0,
+  enableKeepAlive: true,
 });
 
-module.exports = pool;
+function log(operation, table, details) {
+  console.log(`[DB] ${new Date().toISOString()} ${operation} ${table} ${JSON.stringify(details)}`);
+}
+
+async function testConnection() {
+  const conn = await pool.getConnection();
+  try {
+    await conn.ping();
+    console.log(`[DB] Connected to MySQL database "${pool.pool.config.connectionConfig.database}"`);
+  } finally {
+    conn.release();
+  }
+}
+
+async function closePool() {
+  await pool.end();
+  console.log('[DB] Connection pool closed');
+}
+
+module.exports = { pool, log, testConnection, closePool };
