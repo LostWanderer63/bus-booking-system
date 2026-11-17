@@ -1,0 +1,16 @@
+{
+  "name": "bus-booking-system",
+  "version": "1.0.0",
+  "description": "Express + MySQL API for a bus booking system",
+  "main": "src/app.js",
+  "scripts": {
+    "start": "node src/app.js",
+    "db:init": "mysql -u root -p < schema.sql"
+  },
+  "license": "MIT",
+  "dependencies": {
+    "dotenv": "^18.0.10",
+    "express": "^5.3.0",
+    "mysql2": "^3.24.6"
+  }
+}
