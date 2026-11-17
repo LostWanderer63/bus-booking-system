@@ -57,3 +57,19 @@ curl -X POST localhost:3000/users -H 'Content-Type: application/json' \
 With the server running, `npm run demo` creates **Virat Kohli** (`virat.kohli@example.com`),
 updates it to **King Kohli** (`king.kohli@example.com`), deletes it, then confirms that
 GET/PUT/DELETE on the deleted id return `404`.
+
+## Sample data and queries
+
+```bash
+mysql -u <user> -p < sql/seed.sql      # 5 users, buses, bookings, payments (safe to re-run)
+mysql -u <user> -p < sql/queries.sql   # all users; buses with availableSeats > 10
+```
+
+| Method | Path                      | Description                                        |
+|--------|---------------------------|----------------------------------------------------|
+| POST   | `/users`                  | Add a new user                                     |
+| GET    | `/users`                  | Retrieve all users                                 |
+| POST   | `/buses`                  | Add a new bus                                      |
+| GET    | `/buses/available/:seats` | Buses with more than `:seats` available seats      |
+
+Import [postman/bus-booking.postman_collection.json](postman/bus-booking.postman_collection.json) into Postman to try these requests.

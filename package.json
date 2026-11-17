@@ -6,7 +6,8 @@
   "scripts": {
     "start": "node src/app.js",
     "db:init": "mysql -u root -p < schema.sql",
-    "demo": "node scripts/kohli-demo.js"
+    "demo": "node scripts/kohli-demo.js",
+    "db:seed": "mysql -u root -p < sql/seed.sql"
   },
   "license": "MIT",
   "dependencies": {

@@ -1,6 +1,7 @@
 const express = require('express');
 require('dotenv').config();
 const crudRouter = require('./routes/crud');
+const busesRouter = require('./routes/buses');
 const { testConnection, closePool } = require('./db');
 
 const app = express();
@@ -9,6 +10,7 @@ app.use(express.json());
 app.get('/', (req, res) => res.json({ status: 'ok', service: 'bus-booking-system' }));
 
 app.use('/users', crudRouter('Users', ['name', 'email']));
+app.use('/buses', busesRouter);
 app.use('/buses', crudRouter('Buses', ['busNumber', 'totalSeats', 'availableSeats']));
 app.use('/bookings', crudRouter('Bookings', ['seatNumber']));
 app.use('/payments', crudRouter('Payments', ['amountPaid', 'paymentStatus']));

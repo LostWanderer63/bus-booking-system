@@ -1,0 +1,108 @@
+{
+  "info": {
+    "name": "Bus Booking System",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:3000"
+    }
+  ],
+  "item": [
+    {
+      "name": "Add user",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/users",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "users"
+          ]
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"name\": \"Meera Nair\",\n  \"email\": \"meera.nair@example.com\"\n}"
+        }
+      }
+    },
+    {
+      "name": "Get all users",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/users",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "users"
+          ]
+        }
+      }
+    },
+    {
+      "name": "Add bus",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/buses",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "buses"
+          ]
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"busNumber\": \"KL-05-KL-2468\",\n  \"totalSeats\": 40,\n  \"availableSeats\": 12\n}"
+        }
+      }
+    },
+    {
+      "name": "Buses with more than 10 available seats",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/buses/available/10",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "buses",
+            "available",
+            "10"
+          ]
+        }
+      }
+    }
+  ]
+}
