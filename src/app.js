@@ -14,7 +14,6 @@ app.use('/payments', crudRouter('Payments', ['amountPaid', 'paymentStatus']));
 
 app.use((req, res) => res.status(404).json({ error: 'Route not found' }));
 
-// eslint-disable-next-line no-unused-vars
 app.use((err, req, res, next) => {
   const clientErrors = ['ER_DUP_ENTRY', 'ER_CHECK_CONSTRAINT_VIOLATED', 'ER_TRUNCATED_WRONG_VALUE_FOR_FIELD', 'WARN_DATA_TRUNCATED', 'ER_BAD_NULL_ERROR', 'ER_NO_DEFAULT_FOR_FIELD'];
   const status = clientErrors.includes(err.code) ? 400 : 500;

@@ -1,16 +1,13 @@
--- Bus Booking System: initial database schema (MySQL)
 
 CREATE DATABASE IF NOT EXISTS bus_booking;
 USE bus_booking;
 
--- Users: people who book seats
 CREATE TABLE Users (
   id INT AUTO_INCREMENT PRIMARY KEY,
   name VARCHAR(255) NOT NULL,
   email VARCHAR(255) NOT NULL UNIQUE
 );
 
--- Buses: available buses and their seat capacity
 CREATE TABLE Buses (
   id INT AUTO_INCREMENT PRIMARY KEY,
   busNumber VARCHAR(50) NOT NULL UNIQUE,
@@ -20,14 +17,12 @@ CREATE TABLE Buses (
   CHECK (availableSeats >= 0 AND availableSeats <= totalSeats)
 );
 
--- Bookings: seats booked on a bus
 CREATE TABLE Bookings (
   id INT AUTO_INCREMENT PRIMARY KEY,
   seatNumber INT NOT NULL,
   CHECK (seatNumber > 0)
 );
 
--- Payments: payment records for bookings
 CREATE TABLE Payments (
   id INT AUTO_INCREMENT PRIMARY KEY,
   amountPaid DECIMAL(10, 2) NOT NULL,
