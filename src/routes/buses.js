@@ -1,19 +1,26 @@
 const express = require('express');
-const { pool } = require('../db');
+const { Op } = require('sequelize');
+const { Bus } = require('../models');
 
 const router = express.Router();
 
-router.get('/available/:seats', async (req, res, next) => {
-  const { seats } = req.params;
-  if (!/^\d+$/.test(seats)) return res.status(400).json({ error: 'seats must be a non-negative integer' });
-
+router.post('/', async (req, res, next) => {
   try {
-    const [rows] = await pool.query(
-      'SELECT id, busNumber, totalSeats, availableSeats FROM Buses WHERE availableSeats > ?',
-      [Number(seats)]
-    );
-    console.log(`[DB] ${new Date().toISOString()} SELECT Buses {"availableSeats >":${seats},"count":${rows.length}}`);
-    res.json(rows);
+    const { busNumber, totalSeats, availableSeats } = req.body;
+    const bus = await Bus.create({ busNumber, totalSeats, availableSeats });
+    console.log(`INSERT: bus ${bus.id} created`);
+    res.status(201).json(bus);
+  } catch (err) { next(err); }
+});
+
+router.get('/available/:seats', async (req, res, next) => {
+  const seats = Number(req.params.seats);
+  if (!Number.isInteger(seats) || seats < 0) {
+    return res.status(400).json({ error: 'seats must be a non-negative integer' });
+  }
+  try {
+    const buses = await Bus.findAll({ where: { availableSeats: { [Op.gt]: seats } } });
+    res.json(buses);
   } catch (err) { next(err); }
 });
 

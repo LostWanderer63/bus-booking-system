@@ -1,75 +1,47 @@
 # Bus Booking System
 
-Initial MySQL schema for a bus booking system where users book seats on buses and pay for their bookings.
+Express API for a bus booking system using **Sequelize** (MySQL).
 
-## Tables
-
-| Table    | Columns                                   |
-|----------|-------------------------------------------|
-| Users    | id, name, email                           |
-| Buses    | id, busNumber, totalSeats, availableSeats |
-| Bookings | id, seatNumber                            |
-| Payments | id, amountPaid, paymentStatus             |
-
-Every `id` is an `INT AUTO_INCREMENT PRIMARY KEY`.
-
-## Run
-
-```bash
-mysql -u <user> -p < schema.sql
-```
-
-## Express API
-
-### Setup
+## Setup
 
 ```bash
 npm install
-cp .env.example .env        # fill in your MySQL credentials
-mysql -u <user> -p < schema.sql
-npm start                   # http://localhost:3000
+cp .env.example .env              # add your MySQL credentials
+mysql -u <user> -p < schema.sql   # creates the bus_booking database
+npm run seed                      # adds 3 users and 2 buses with create()
+npm start                         # http://localhost:3000
 ```
 
-### Endpoints
+## Models
 
-Each resource supports `GET /`, `GET /:id`, `POST /`, `PUT /:id`, `DELETE /:id`.
+`src/models/` defines `User`, `Bus`, `Booking` and `Payment` (no associations yet), mapped to the
+`Users`, `Buses`, `Bookings` and `Payments` tables.
 
-| Resource | Path        | Body fields                               |
-|----------|-------------|-------------------------------------------|
-| Users    | `/users`    | name, email                               |
-| Buses    | `/buses`    | busNumber, totalSeats, availableSeats     |
-| Bookings | `/bookings` | seatNumber                                |
-| Payments | `/payments` | amountPaid, paymentStatus                 |
+## Queries
 
-All insert, update and delete operations are logged to the console with a `[DB]` prefix.
-Updating or deleting a non-existent id returns `404`; a non-numeric id returns `400`.
-The connection pool is reused across requests and closed on `SIGINT`/`SIGTERM`.
+`npm run queries` runs:
 
-Example:
+- `User.findAll()` to fetch all users
+- `Bus.findAll({ where: { availableSeats: { [Op.gt]: 10 } } })` to fetch buses with more than 10 seats available
 
-```bash
-curl -X POST localhost:3000/users -H 'Content-Type: application/json' \
-  -d '{"name":"Asha","email":"asha@example.com"}'
-```
+## Endpoints
 
-### Additional task demo
+| Method | Path                      | Description                                   |
+|--------|---------------------------|-----------------------------------------------|
+| POST   | `/users`                  | Add a new user                                |
+| GET    | `/users`                  | Retrieve all users                            |
+| GET    | `/users/:id`              | Retrieve a user                               |
+| PUT    | `/users/:id`              | Update a user                                 |
+| DELETE | `/users/:id`              | Delete a user                                 |
+| POST   | `/buses`                  | Add a new bus                                 |
+| GET    | `/buses/available/:seats` | Buses with more than `:seats` available seats |
 
-With the server running, `npm run demo` creates **Virat Kohli** (`virat.kohli@example.com`),
-updates it to **King Kohli** (`king.kohli@example.com`), deletes it, then confirms that
-GET/PUT/DELETE on the deleted id return `404`.
+Example body for `POST /users`: `{ "name": "Meera Nair", "email": "meera.nair@example.com" }`
+Example body for `POST /buses`: `{ "busNumber": "KL-05-KL-2468", "totalSeats": 40, "availableSeats": 12 }`
 
-## Sample data and queries
+Import [postman/bus-booking.postman_collection.json](postman/bus-booking.postman_collection.json) into Postman to try them.
+Validation errors return `400`, missing users return `404`. SQL run by Sequelize is logged with a `[DB]` prefix.
 
-```bash
-mysql -u <user> -p < sql/seed.sql      # 5 users, buses, bookings, payments (safe to re-run)
-mysql -u <user> -p < sql/queries.sql   # all users; buses with availableSeats > 10
-```
+`npm run demo` (with the server running) creates, updates and deletes a test user.
 
-| Method | Path                      | Description                                        |
-|--------|---------------------------|----------------------------------------------------|
-| POST   | `/users`                  | Add a new user                                     |
-| GET    | `/users`                  | Retrieve all users                                 |
-| POST   | `/buses`                  | Add a new bus                                      |
-| GET    | `/buses/available/:seats` | Buses with more than `:seats` available seats      |
-
-Import [postman/bus-booking.postman_collection.json](postman/bus-booking.postman_collection.json) into Postman to try these requests.
+Raw SQL versions from the earlier phase are in [sql/](sql/).

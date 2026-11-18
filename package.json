@@ -1,18 +1,21 @@
 {
   "name": "bus-booking-system",
   "version": "1.0.0",
-  "description": "Express + MySQL API for a bus booking system",
+  "description": "Express + Sequelize (MySQL) API for a bus booking system",
   "main": "src/app.js",
   "scripts": {
     "start": "node src/app.js",
     "db:init": "mysql -u root -p < schema.sql",
     "demo": "node scripts/kohli-demo.js",
-    "db:seed": "mysql -u root -p < sql/seed.sql"
+    "db:seed": "mysql -u root -p < sql/seed.sql",
+    "seed": "node scripts/seed.js",
+    "queries": "node scripts/queries.js"
   },
   "license": "MIT",
   "dependencies": {
     "dotenv": "^18.0.10",
     "express": "^5.3.0",
-    "mysql2": "^3.24.6"
+    "mysql2": "^3.24.6",
+    "sequelize": "^6.37.8"
   }
 }
