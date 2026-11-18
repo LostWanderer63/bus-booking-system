@@ -1,6 +1,6 @@
 const express = require('express');
 const { Op } = require('sequelize');
-const { Bus } = require('../models');
+const { Bus, User, Booking } = require('../models');
 
 const router = express.Router();
 
@@ -21,6 +21,20 @@ router.get('/available/:seats', async (req, res, next) => {
   try {
     const buses = await Bus.findAll({ where: { availableSeats: { [Op.gt]: seats } } });
     res.json(buses);
+  } catch (err) { next(err); }
+});
+
+router.get('/:id/bookings', async (req, res, next) => {
+  try {
+    const bus = await Bus.findByPk(req.params.id);
+    if (!bus) return res.status(404).json({ error: 'Bus not found' });
+
+    const bookings = await Booking.findAll({
+      where: { busId: bus.id },
+      attributes: ['id', 'seatNumber'],
+      include: [{ model: User, as: 'user', attributes: ['name', 'email'] }],
+    });
+    res.json(bookings);
   } catch (err) { next(err); }
 });
 

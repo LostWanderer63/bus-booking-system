@@ -14,12 +14,12 @@ INSERT IGNORE INTO Buses (id, busNumber, totalSeats, availableSeats) VALUES
   (4, 'TN-09-GH-3456', 45, 3),
   (5, 'TS-07-IJ-7890', 30, 22);
 
-INSERT IGNORE INTO Bookings (id, seatNumber) VALUES
-  (1, 12),
-  (2, 5),
-  (3, 27),
-  (4, 3),
-  (5, 18);
+INSERT IGNORE INTO Bookings (id, seatNumber, userId, busId) VALUES
+  (1, 12, 1, 1),
+  (2, 5, 2, 2),
+  (3, 27, 3, 3),
+  (4, 3, 4, 4),
+  (5, 18, 5, 5);
 
 INSERT IGNORE INTO Payments (id, amountPaid, paymentStatus) VALUES
   (1, 850.00, 'success'),

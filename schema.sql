@@ -20,7 +20,12 @@ CREATE TABLE IF NOT EXISTS Buses (
 CREATE TABLE IF NOT EXISTS Bookings (
   id INT AUTO_INCREMENT PRIMARY KEY,
   seatNumber INT NOT NULL,
-  CHECK (seatNumber > 0)
+  userId INT NOT NULL,
+  busId INT NOT NULL,
+  CHECK (seatNumber > 0),
+  CONSTRAINT fk_bookings_user FOREIGN KEY (userId) REFERENCES Users(id) ON DELETE CASCADE,
+  CONSTRAINT fk_bookings_bus FOREIGN KEY (busId) REFERENCES Buses(id) ON DELETE CASCADE,
+  CONSTRAINT uq_bus_seat UNIQUE (busId, seatNumber)
 );
 
 CREATE TABLE IF NOT EXISTS Payments (

@@ -1,4 +1,4 @@
-const { sequelize, User, Bus } = require('../src/models');
+const { sequelize, User, Bus, Booking } = require('../src/models');
 
 const users = [
   { name: 'Rahul Verma', email: 'rahul.verma@example.com' },
@@ -9,6 +9,13 @@ const users = [
 const buses = [
   { busNumber: 'GJ-01-MN-1122', totalSeats: 40, availableSeats: 25 },
   { busNumber: 'RJ-14-PQ-3344', totalSeats: 30, availableSeats: 6 },
+];
+
+const bookings = [
+  { email: 'rahul.verma@example.com', busNumber: 'GJ-01-MN-1122', seatNumber: 4 },
+  { email: 'rahul.verma@example.com', busNumber: 'RJ-14-PQ-3344', seatNumber: 11 },
+  { email: 'sneha.reddy@example.com', busNumber: 'GJ-01-MN-1122', seatNumber: 5 },
+  { email: 'karan.mehta@example.com', busNumber: 'GJ-01-MN-1122', seatNumber: 20 },
 ];
 
 async function createAll(Model, records) {
@@ -23,10 +30,24 @@ async function createAll(Model, records) {
   }
 }
 
+async function createBookings() {
+  for (const { email, busNumber, seatNumber } of bookings) {
+    const user = await User.findOne({ where: { email } });
+    const bus = await Bus.findOne({ where: { busNumber } });
+    const [booking, created] = await Booking.findOrCreate({
+      where: { busId: bus.id, seatNumber },
+      defaults: { userId: user.id },
+    });
+    if (created) await bus.decrement('availableSeats');
+    console.log(`${created ? 'Created' : 'Skipped existing'} Booking ${booking.id} (user ${user.id}, bus ${bus.id}, seat ${seatNumber})`);
+  }
+}
+
 async function main() {
   await sequelize.sync();
   await createAll(User, users);
   await createAll(Bus, buses);
+  await createBookings();
 }
 
 main()

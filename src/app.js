@@ -2,6 +2,7 @@ const express = require('express');
 const { sequelize } = require('./models');
 const usersRouter = require('./routes/users');
 const busesRouter = require('./routes/buses');
+const bookingsRouter = require('./routes/bookings');
 
 const app = express();
 app.use(express.json());
@@ -9,6 +10,7 @@ app.use(express.json());
 app.get('/', (req, res) => res.json({ status: 'ok', service: 'bus-booking-system' }));
 app.use('/users', usersRouter);
 app.use('/buses', busesRouter);
+app.use('/bookings', bookingsRouter);
 
 app.use((req, res) => res.status(404).json({ error: 'Route not found' }));
 

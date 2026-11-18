@@ -1,5 +1,5 @@
 const express = require('express');
-const { User } = require('../models');
+const { User, Bus, Booking } = require('../models');
 
 const router = express.Router();
 
@@ -24,6 +24,20 @@ router.get('/:id', async (req, res, next) => {
     const user = await User.findByPk(req.params.id);
     if (!user) return res.status(404).json({ error: 'User not found' });
     res.json(user);
+  } catch (err) { next(err); }
+});
+
+router.get('/:id/bookings', async (req, res, next) => {
+  try {
+    const user = await User.findByPk(req.params.id);
+    if (!user) return res.status(404).json({ error: 'User not found' });
+
+    const bookings = await Booking.findAll({
+      where: { userId: user.id },
+      attributes: ['id', 'seatNumber'],
+      include: [{ model: Bus, as: 'bus', attributes: ['busNumber'] }],
+    });
+    res.json(bookings);
   } catch (err) { next(err); }
 });
 
